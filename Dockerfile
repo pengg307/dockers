@@ -7,8 +7,6 @@ ENV NGINX_VERSION   1.16.1
 ENV NJS_VERSION     0.3.8
 ENV PKG_RELEASE     1
 
-COPY res/html/ /usr/share/nginx/
-
 RUN set -x \
 # create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
@@ -116,6 +114,8 @@ RUN chown -R 101:0 /var/cache/nginx \
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
+
+COPY res/html/ /usr/share/nginx/
 
 EXPOSE 8080
 
