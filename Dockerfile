@@ -7,6 +7,8 @@ ENV NGINX_VERSION   1.16.1
 ENV NJS_VERSION     0.3.8
 ENV PKG_RELEASE     1
 
+COPY res/html/ /usr/share/nginx/
+
 RUN set -x \
 # create nginx user/group first, to be consistent throughout docker variants
     && addgroup -g 101 -S nginx \
