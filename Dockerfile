@@ -115,7 +115,7 @@ RUN chown -R 101:0 /var/cache/nginx \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY res/html/ /usr/share/nginx/
+COPY res/html/ /usr/share/nginx/html/
 
 EXPOSE 8080
 
