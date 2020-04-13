@@ -115,12 +115,24 @@ RUN chown -R 101:0 /var/cache/nginx \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
+# webdis
+RUN apk update && apk add wget make gcc libevent-dev msgpack-c-dev musl-dev bsd-compat-headers libevent msgpack-c redis
+RUN wget https://github.com/nicolasff/webdis/archive/0.1.9.tar.gz -O webdis-0.1.9.tar.gz
+RUN tar -xvzf webdis-0.1.9.tar.gz
+RUN cd webdis-0.1.9 && make && make install && cd ..
+RUN sed -i -e 's/"daemonize":.*true,/"daemonize": false,/g' /etc/webdis.prod.json
+
+RUN echo "daemonize yes" >> /etc/redis.conf
+CMD /usr/bin/redis-server /etc/redis.conf && /usr/local/bin/webdis /etc/webdis.prod.json
+
+# copy html fold
 COPY res/html/ /usr/share/nginx/html/
 
-EXPOSE 8080
+EXPOSE 8080 7379
 
 STOPSIGNAL SIGTERM
 
 USER root
 
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
+CMD /usr/bin/redis-server /etc/redis.conf && /usr/local/bin/webdis /etc/webdis.prod.json && nginx -g \"daemon off;\"
