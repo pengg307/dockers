@@ -117,6 +117,9 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 
 COPY res/html/ /usr/share/nginx/html/
 
+RUN mkdir -p /usr/share/nginx/html/downloads/
+RUN ln -sf /mnt/drivex/html/downloads/misc /usr/share/nginx/html/downloads/misc
+
 EXPOSE 8080
 
 STOPSIGNAL SIGTERM
